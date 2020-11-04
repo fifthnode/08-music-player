@@ -1,9 +1,36 @@
+const image = document.querySelector('img');
+const title = document.getElementById('title');
+const artist = document.getElementById('artist');
 const music = document.querySelector('audio');
 const prevBtn = document.getElementById('prev');
 const playBtn = document.getElementById('play');
 const nextBtn = document.getElementById('next');
 
-// Check is playing
+// Music
+const songs = [
+  {
+    name: 'jacinto-1',
+    displayName: 'Electric Chill Machine',
+    artist: 'Jacinto Design'
+  },
+  {
+    name: 'jacinto-2',
+    displayName: 'Seven Nation Army (Remix)',
+    artist: 'Jacinto Design'
+  },
+  {
+    name: 'jacinto-3',
+    displayName: 'Goodnight, Disco Queen',
+    artist: 'Jacinto Design'
+  },
+  {
+    name: 'metric-1',
+    displayName: 'Front Row (Remix)',
+    artist: 'Metric/Jacinto Design'
+  }
+]
+
+// Check if playing
 let isPlaying = false;
 
 // Play
@@ -24,3 +51,41 @@ function pauseSong() {
 
 // Play or Pause event listener
 playBtn.addEventListener('click', () => (isPlaying ? pauseSong() : playSong()));
+
+// Update the DOM
+function loadSong(song) {
+  title.textContent = song.displayName;
+  artist.textContent = song.artist;
+  music.src = `music/${song.name}.mp3`;
+  image.src = `img/${song.name}.jpg`;
+}
+
+// Current song
+let songIndex = 0;
+
+// Previous song
+function prevSong() {
+  songIndex--;
+  if (songIndex < 0) {
+    songIndex = songs.length - 1;
+  }
+  loadSong(songs[songIndex]);
+  playSong();
+}
+
+// Next song
+function nextSong() {
+  songIndex++;
+  if (songIndex > songs.length - 1) {
+    songIndex = 0;
+  }
+  loadSong(songs[songIndex]);
+  playSong();
+}
+
+// On load – select first song
+loadSong(songs[songIndex]);
+
+// Event listeners
+prevBtn.addEventListener('click', prevSong);
+nextBtn.addEventListener('click', nextSong);
